@@ -11,4 +11,8 @@ let handler = async (m, { conn }) => conn.sendButtonLoc(m.chat, await (await fet
 ▌│█║▌║▌║║▌║▌║█│▌
 `.trim(), `Kocheng`, 'Owner', '.owner')
 
+handler.help = ['donasi', 'donor']
+handler.tags = ['info']
+handler.command = /^donasi(donate)?$/i
+
 module.exports = handler
