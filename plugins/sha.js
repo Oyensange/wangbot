@@ -1,10 +1,10 @@
 let handler  = async (m, { conn, usedPrefix: _p }) => {
 ye = `@${m.sender.split`@`[0]}`
-let info = `Hai Kak ${ye} lagi nyari sc nya ya?
+let info = `Hai Kak ${ye} lagi nyari sc nya ya?:v
 Link Sc Dibawah Ini :
-https://www.youtube.com/channel/UCVSEzfCh6VYL3g9ixHnSqXQ
+https://ponselharian.com/CbToH
 
-*Jangan Lupa Subscribe ya kak, kalo gak subscribe saya doakan gak work aminn...*
+*Jangan Lupa Kasih star ya kak, kalo gak kasih star saya doakan gak work aminn...*
 `.trim()
 
 conn.fakeReply(m.chat, info, '0@s.whatsapp.net', `*${global.packname}*`, 'status@broadcast') 
