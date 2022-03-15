@@ -18,9 +18,9 @@ let dapat = (Math.floor(Math.random() * 10000000000000000))
   m.reply(`Berhasil Merampok Money Target Sebesar ${dapat}`)
 }else conn.reply(m.chat, `Anda Sudah merampok dan berhasil sembunyi , tunggu ${timers} untuk merampok lagi`, m)
 }
-//handler.help = ['merampok *@tag*']
+//handler.help = ['rampok *@tag*']
 //handler.tags = ['rpg']
-handler.command = /^sjeo$/
+handler.command = /^rampok$/
 handler.limit = true
 handler.group = true
 
