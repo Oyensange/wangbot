@@ -1,4 +1,6 @@
+require("http").createServer((_, res) => res.end("Uptime!")).listen(8080)
 require('./config.js')
+process.env['NODE_TLS_REJECT_UNAUTHORIZED'] = '0';
 const { WAConnection: _WAConnection } = require('@adiwajshing/baileys')
 const cloudDBAdapter = require('./lib/cloudDBAdapter')
 const { generate } = require('qrcode-terminal')
@@ -12,6 +14,8 @@ const cp = require('child_process')
 const _ = require('lodash')
 const path = require('path')
 const fs = require('fs')
+const more = String.fromCharCode(8206)
+const readMore = more.repeat(4104)
 var low
 try {
   low = require('lowdb')
@@ -23,13 +27,16 @@ const { Low, JSONFile } = low
 const rl = Readline.createInterface(process.stdin, process.stdout)
 const WAConnection = simple.WAConnection(_WAConnection)
 
-require("http").createServer((_, res) => res.end("Uptime!")).listen(8080)  
 
+global.API = (name, path = '/', query = {}, apikeyqueryname) => (name in global.APIs ? global.APIs[name] : name) + path + (query || apikeyqueryname ? '?' + new URLSearchParams(Object.entries({ ...query, ...(apikeyqueryname ? { [apikeyqueryname]: global.APIKeys[name in global.APIs ? global.APIs[name] : name] } : {}) })) : '')
+global.timestamp = {
+  start: new Date
+}
 // global.LOGGER = logs()
 const PORT = process.env.PORT || 3000
 global.opts = new Object(yargs(process.argv.slice(2)).exitProcess(false).parse())
 
-global.prefix = new RegExp('^[' + (opts['prefix'] || '‎xzXZ/i!#$%+£¢€¥^°=¶∆×÷π√✓©®:;?&.\\-').replace(/[|\\{}()[\]^$+*?.\-\^]/g, '\\$&') + ']')
+global.prefix = new RegExp('^[' + (opts['prefix'] || '/!#,?.\\-').replace(/[|\\{}()[\]^$+*?.\-\^]/g, '\\$&') + ']')
 
 global.db = new Low(
   /https?:\/\//.test(opts['db'] || '') ?
@@ -39,6 +46,8 @@ global.db = new Low(
 global.DATABASE = global.db // Backwards Compatibility
 
 global.conn = new WAConnection()
+conn.version =[2,2143,3]
+conn.browserDescription =['Kanna BOT', 'Firefox', '3.0']
 let authFile = `${opts._[0] || 'session'}.data.json`
 if (fs.existsSync(authFile)) conn.loadAuthInfo(authFile)
 if (opts['trace']) conn.logger.level = 'trace'
@@ -121,10 +130,22 @@ global.reloadHandler = function () {
     conn.off('group-participants-update', conn.onParticipantsUpdate)
     conn.off('CB:action,,call', conn.onCall)
   }
-  conn.welcome = 'Hai, @user!\nSelamat datang di grup @subject\n\n@desc'
-  conn.bye = 'Selamat tinggal anak anjing gausah balik lagi ya @user!'
-  conn.spromote = '@user sekarang admin!'
-  conn.sdemote = '@user sekarang bukan admin!'
+  conn.welcome = `*Hai @user ! 👋*
+         ‷✧ Selamat Datang di Grup
+           *@subject*
+           
+╭◪ *Intro Member Baru* ◪─
+│ ✧ *Nama:*
+│ ✧ *Umur:*
+│ ✧ *Status:*
+│ ✧ *Askot:*
+╰◪
+  ${readMore}
+              *◌  ⃝✧⪼ Deskripsi Group ミ*
+  @desc`
+  conn.bye = '```Sayonara @user ! 👋```'
+  conn.spromote = '「 *PROMOTE* 」\n @user sekarang admin!'
+  conn.sdemote = '「 *DEMOTE*」\n @user sekarang bukan admin!'
   conn.handler = handler.handler
   conn.onDelete = handler.delete
   conn.onParticipantsUpdate = handler.participantsUpdate
@@ -172,14 +193,14 @@ global.reload = (_event, filename) => {
     let dir = path.join(pluginFolder, filename)
     if (dir in require.cache) {
       delete require.cache[dir]
-      if (fs.existsSync(dir)) conn.logger.info(`re - require plugin '${filename}'`)
+      if (fs.existsSync(dir)) conn.logger.info(`[🔄] re - require plugin '${filename}'`)
       else {
-        conn.logger.warn(`deleted plugin '${filename}'`)
+        conn.logger.warn(`[⛔] deleted plugin '${filename}'`)
         return delete global.plugins[filename]
       }
-    } else conn.logger.info(`requiring new plugin '${filename}'`)
+    } else conn.logger.info(`[✅] requiring new plugin '${filename}'`)
     let err = syntaxerror(fs.readFileSync(dir), filename)
-    if (err) conn.logger.error(`syntax error while loading '${filename}'\n${err}`)
+    if (err) conn.logger.error(`[❗] syntax error while loading '${filename}'\n${err}`)
     else try {
       global.plugins[filename] = require(dir)
     } catch (e) {
