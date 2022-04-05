@@ -407,15 +407,15 @@ Contoh penggunaan: *${usedPrefix + command} buy potion 1*
                         } else conn.reply(m.chat, `uang mu tidak cukup untuk membeli pickaxe seharga ${pickaxe} money`, m)
                         break
                   case 'fishingrod':
-                        if (global.db.data.users[m.sender].fishingrod == 5) return conn.reply(m.chat, 'Fishingrodmu sudah *Level Max*', m)
-                        if (global.db.data.users[m.sender].money > fishingrod * 1) {
-                            global.db.data.users[m.sender].fishingrod += 1
-                            global.db.data.users[m.sender].fishingroddurability += ( 0 ? 500 : '' || 1 ? 1000 : '' || 2 ? 1500 : '' || 3 ? 2000 : '' || 4 ? 2500 : '' || 5 ? 3000 : '')
-                            global.db.data.users[m.sender].money -= fishingrod * 1
-                            conn.reply(m.chat, `Succes membeli fishingrod seharga ${fishingrod} money` ,m)
-                            
-                       } else conn.reply(m.chat, `uang mu tidak cukup untuk membeli fishingrod seharga ${fishingrod} money`, m)
-                       break
+                            if (global.db.data.users[m.sender].pancing == 1) return conn.reply(m.chat, 'Kamu sudah memiliki pancingan', m)
+                            if (global.db.data.users[m.sender].money > armor) {
+                                global.db.data.users[m.sender].pancing += 1
+                                global.db.data.users[m.sender].money -= armor * 1
+                                global.db.data.users[m.sender].fishingroddurability = durfishingrod
+                                conn.reply(m.chat, `✔️ Sukses Membeli Pancingan 🎣 Seharga ${pancing} Money` ,m)
+                            } else conn.reply(m.chat, `Uang Mu Tidak Cukup Untuk Membeli Pancingan 🎣 Seharga ${pancing} Money 💹`, m)
+                        
+                        break
                 default:
                     return conn.reply(m.chat, Kchat, m)
             }
